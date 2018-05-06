@@ -1,13 +1,22 @@
 package pet;
 import pet.obj.LeagueGroup;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
- * @author NGUYENCA
+ * The Class MainPerform.
  *
+ * @author NGUYENCA
  */
 public class MainPerform {
-	static LeagueGroup leaguaGroup = new LeagueGroup();
+	
+	/** The leagua group. */
+	static LeagueGroup leaguaGroup = null;
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String... args) {
 		leaguaGroup = new LeagueGroup();
 		leaguaGroup.getClubsTask("clubs.txt");

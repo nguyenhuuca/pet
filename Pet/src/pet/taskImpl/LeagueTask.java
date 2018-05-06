@@ -14,16 +14,26 @@ import pet.obj.StandingData;
 import pet.task.Task;
 import pet.utils.Constants;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author NGUYENCA
+ * The Class LeagueTask.
  *
+ * @author NGUYENCA
  */
 public class LeagueTask implements Task {
 
+	/** The pattern. */
 	Pattern pattern = Pattern.compile("([a-zA-Z ]+)(\\d):(\\d)\\s+([a-zA-Z ]+)");
+	
+	/** The matcher. */
 	Matcher matcher = null;
+	
+	/** The stand. */
 	StandingData stand = null;
 
+	/* (non-Javadoc)
+	 * @see pet.task.Task#task(pet.obj.FootballClub, java.util.List)
+	 */
 	@Override
 	public StandingData task(FootballClub club, List<String> rs) {
 		stand = new StandingData();
@@ -40,14 +50,17 @@ public class LeagueTask implements Task {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see pet.task.Task#printStandingResult(java.util.List)
+	 */
 	@Override
 	public void printStandingResult(List<FootballClub> clubs) {
 		String fileName = "standing.txt";
-	
+
 		try {
 			FileWriter fileWriter = new FileWriter(fileName);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            String headerWithRank = String.format("%-5s %-10s", "RANK",Constants.HEADER);
+			String headerWithRank = String.format("%-5s %-10s", "RANK", Constants.HEADER);
 			bufferedWriter.write(headerWithRank);
 			bufferedWriter.newLine();
 			String line = null;
@@ -55,7 +68,7 @@ public class LeagueTask implements Task {
 			try {
 				for (FootballClub club : clubs) {
 					rank++;
-					line = String.format("%-5s %-10s",rank, club.getStandingData().standardString());
+					line = String.format("%-5s %-10s", rank, club.getStandingData().standardString());
 					bufferedWriter.write(line);
 					bufferedWriter.newLine();
 				}
@@ -69,6 +82,70 @@ public class LeagueTask implements Task {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see pet.task.Task#getCLubsFromFile(java.lang.String)
+	 */
+	@Override
+	public List<FootballClub> getCLubsFromFile(String fileName) {
+		List<FootballClub> clubs = new ArrayList<FootballClub>();
+		String line = null;
+		FootballClub foolBallClub = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader buff = new BufferedReader(fileReader);
+			try {
+				while ((line = buff.readLine()) != null) {
+					foolBallClub = new FootballClub(line);
+					clubs.add(foolBallClub);
+				}
+
+			} finally {
+				buff.close();
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+
+		}
+		return clubs;
+
+	}
+
+	/* (non-Javadoc)
+	 * @see pet.task.Task#getResultFromFile(java.lang.String)
+	 */
+	@Override
+	public List<String> getResultFromFile(String fileName) {
+		List<String> results = new ArrayList<String>();
+		String line = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader buff = new BufferedReader(fileReader);
+			try {
+				while ((line = buff.readLine()) != null) {
+					if (!line.isEmpty() && !line.startsWith("Matchday")) {
+						results.add(line);
+					}
+				}
+
+			} finally {
+				buff.close();
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+
+		}
+
+		return results;
+	}
+
+	/**
+	 * Populate stading data.
+	 *
+	 * @param matcher the matcher
+	 * @param clubName the club name
+	 */
 	void populateStadingData(Matcher matcher, String clubName) {
 		int scoreHome = 0;
 		int scoreGuest = 0;
@@ -93,58 +170,6 @@ public class LeagueTask implements Task {
 			stand.setGoalAgainst(stand.getGoalAgainst() + scoreGuest);
 		}
 
-	}
-
-	@Override
-	public List<FootballClub> getCLubsFromFile(String fileName) {
-		List<FootballClub>  clubs = new ArrayList<FootballClub>();
-		String line = null;
-		FootballClub foolBallClub = null;
-		try {
-			FileReader fileReader = new FileReader(fileName);
-			BufferedReader buff = new BufferedReader(fileReader);
-			try {
-				while ((line = buff.readLine()) != null) {
-					foolBallClub = new FootballClub(line);
-					clubs.add(foolBallClub);
-				}
-
-			} finally {
-				buff.close();
-			}
-
-		} catch (Exception e) {
-			System.out.println(e);
-
-		}
-		return clubs;
-		
-	}
-
-	@Override
-	public List<String> getResultFromFile(String fileName) {
-		List<String>  results = new ArrayList<String>();
-		String line = null;
-		try {
-			FileReader fileReader = new FileReader(fileName);
-			BufferedReader buff = new BufferedReader(fileReader);
-			try {
-				while ((line = buff.readLine()) != null) {
-					if (!line.isEmpty() && !line.startsWith("Matchday")) {
-						results.add(line);
-					}
-				}
-
-			} finally {
-				buff.close();
-			}
-
-		} catch (Exception e) {
-			System.out.println(e);
-
-		}
-		
-		return results;
 	}
 
 }
